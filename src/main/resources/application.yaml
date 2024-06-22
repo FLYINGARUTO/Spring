@@ -1,1 +1,14 @@
 spring.application.name: springboot-project-backend
+
+spring:
+    security:
+      filter:
+        order: -100
+      jwt:
+        key: abcdefg
+        expire: 1
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: lx120688
+      url: jdbc:mysql://localhost:3306/spring_project
