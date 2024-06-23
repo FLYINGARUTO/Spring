@@ -1,6 +1,22 @@
 spring.application.name: springboot-project-backend
 
 spring:
+    amqp:
+      deserialization:
+        trust:
+          all: true
+
+    mail:
+      host: smtp.163.com
+      username: 15228204975@163.com
+      password: BREZBQTPCZKPRMTL
+    rabbitmq:
+      addresses: localhost
+      username: guest
+      password: guest
+      virtual-host: /
+      port: 5672
+
     security:
       filter:
         order: -100

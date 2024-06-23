@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringbootProjectBackendApplication {
 
     public static void main(String[] args) {
+      //  System.setProperty("spring.amqp.deserialization.trust.all", "true");
         SpringApplication.run(SpringbootProjectBackendApplication.class, args);
     }
 
