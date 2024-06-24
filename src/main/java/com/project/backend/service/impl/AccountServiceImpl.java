@@ -1,8 +1,10 @@
 package com.project.backend.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.project.backend.entity.Const;
 import com.project.backend.entity.dto.Account;
+import com.project.backend.entity.vo.request.EmailAccountVO;
 import com.project.backend.mapper.AccountMapper;
 import com.project.backend.service.AccountService;
 import com.project.backend.utils.FluxUtils;
@@ -12,8 +14,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +31,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     @Resource
     FluxUtils fluxUtils;
 
+    @Resource
+    PasswordEncoder encoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account=this.findByNameOrEmail(username);
@@ -62,5 +68,32 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
             return null;
         }
 
+    }
+
+    @Override
+    public String registerEmailAccount(EmailAccountVO vo) {
+        String username= vo.getUsername();
+        String email= vo.getEmail();
+        String codeKey=Const.VERIFY_EMAIL_DATA+email;
+        //从redis中获取验证码
+        String code=template.opsForValue().get(codeKey);
+        if(code==null) return "您尚未请求验证码";
+        //判断客户端输入的验证码是否正确
+        if (!code.equals(vo.getCode()) ) return "验证码错误，请重试";
+        //判断用户名和邮箱是否已被占用
+        if(this.existsAccountByEmail(email)) return "该邮箱已被占用";
+        if(this.existsAccountByUsername(username))return "该用户名已被占用";
+        String password=encoder.encode(vo.getPassword());
+        Account account=new Account(null,username,password,email,"user",new Date());
+        if(this.save(account))
+            return null;
+        return "内部错误，请联系管理员";
+    }
+
+    private boolean existsAccountByEmail(String email){
+        return this.baseMapper.exists(Wrappers.<Account>query().eq("email",email));
+    }
+    private boolean existsAccountByUsername(String username){
+        return this.baseMapper.exists(Wrappers.<Account>query().eq("username",username));
     }
 }

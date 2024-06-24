@@ -3,6 +3,7 @@ package com.project.backend.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.project.backend.entity.dto.Account;
 
+import com.project.backend.entity.vo.request.EmailAccountVO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AccountService extends IService<Account>, UserDetailsService {
@@ -17,4 +18,13 @@ public interface AccountService extends IService<Account>, UserDetailsService {
      * @return
      */
     String registerEmailVerifyCode(String type, String email,String ip);
+
+
+    /**
+     * 注册账号
+     * @param vo 注册请求封装的实体类
+     *  包含 用户名 邮箱 密码 验证码
+     * @return
+     */
+    String registerEmailAccount(EmailAccountVO vo);
 }
