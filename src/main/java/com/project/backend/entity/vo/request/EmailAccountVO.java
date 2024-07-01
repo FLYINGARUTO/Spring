@@ -13,6 +13,7 @@ public class EmailAccountVO {
     @Length(min=6,max = 20)
     String password;
     @Email
+    @Length(min=5)
     String email;
     @Length(min = 6,max = 6)
     String code;

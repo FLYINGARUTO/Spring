@@ -22,7 +22,7 @@ public class AuthorizeController {
     public RestBean<Void> getVerifyCode(@RequestParam @Pattern(regexp = "register|reset") String type,
                                   @RequestParam @Email String email,
                                   HttpServletRequest request){
-       String result = service.registerEmailVerifyCode(type,email,request.getRequestURL().toString());
+       String result = service.registerEmailVerifyCode(type,email,request.getRemoteAddr());
        return result==null? RestBean.success() : RestBean.fail(400,result);
     }
     @PostMapping("/register")
