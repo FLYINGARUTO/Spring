@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.project.backend.entity.Const;
 import com.project.backend.entity.dto.Account;
 import com.project.backend.entity.vo.request.EmailAccountVO;
+import com.project.backend.entity.vo.request.ResetPasswordVO;
+import com.project.backend.entity.vo.request.ResetVerifyVO;
 import com.project.backend.mapper.AccountMapper;
 import com.project.backend.service.AccountService;
 import com.project.backend.utils.FluxUtils;
@@ -88,6 +90,26 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         if(this.save(account))
             return null;
         return "内部错误，请联系管理员";
+    }
+
+    @Override
+    public String resetVerification(ResetVerifyVO vo) {
+        String key=Const.VERIFY_EMAIL_DATA+vo.getEmail();
+        String code = template.opsForValue().get(key);
+        if(code==null) return "请先请求验证码";
+        if(!code.equals(vo.getCode())) return "验证码错误，请重试";
+        return null;
+    }
+
+    @Override
+    public String resetPassword(ResetPasswordVO vo) {
+        String email=vo.getEmail();
+        String result=resetVerification(new ResetVerifyVO(vo.getEmail(),vo.getCode()));
+        if(result!=null) return result;
+        String password=encoder.encode(vo.getPassword());
+        boolean update=this.update().eq("email",email).set("password",password).update();
+        if(!update) return "出现错误";
+        return  null;
     }
 
     private boolean existsAccountByEmail(String email){

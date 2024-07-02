@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.project.backend.entity.dto.Account;
 
 import com.project.backend.entity.vo.request.EmailAccountVO;
+import com.project.backend.entity.vo.request.ResetPasswordVO;
+import com.project.backend.entity.vo.request.ResetVerifyVO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AccountService extends IService<Account>, UserDetailsService {
@@ -27,4 +29,20 @@ public interface AccountService extends IService<Account>, UserDetailsService {
      * @return
      */
     String registerEmailAccount(EmailAccountVO vo);
+
+
+    /**
+     * 重置密码的第一步 输入email和验证码验证身份
+     * @param vo
+     * @return
+     */
+    String resetVerification(ResetVerifyVO vo);
+
+
+    /**
+     * 重置密码的第二步 提交新密码
+     * @param vo
+     * @return
+     */
+    String resetPassword(ResetPasswordVO vo);
 }

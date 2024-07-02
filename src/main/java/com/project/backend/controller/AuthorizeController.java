@@ -2,6 +2,8 @@ package com.project.backend.controller;
 
 import com.project.backend.entity.RestBean;
 import com.project.backend.entity.vo.request.EmailAccountVO;
+import com.project.backend.entity.vo.request.ResetPasswordVO;
+import com.project.backend.entity.vo.request.ResetVerifyVO;
 import com.project.backend.service.AccountService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +30,18 @@ public class AuthorizeController {
     @PostMapping("/register")
     public RestBean<Void> register(@RequestBody @Valid EmailAccountVO vo){
         String message=service.registerEmailAccount(vo);
+        return message==null? RestBean.success() : RestBean.fail(400,message);
+    }
+
+    @PostMapping("/resetConfirm")
+    public RestBean<Void> resetConfirm(@RequestBody @Valid ResetVerifyVO vo){
+        String message=service.resetVerification(vo);
+        return message==null? RestBean.success() : RestBean.fail(400,message);
+    }
+
+    @PostMapping("/reset-password")
+    public RestBean<Void> resetPassword(@RequestBody @Valid ResetPasswordVO vo){
+        String message= service.resetPassword(vo);
         return message==null? RestBean.success() : RestBean.fail(400,message);
     }
 
