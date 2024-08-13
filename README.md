@@ -1,13 +1,19 @@
-**后端功能与技术点**  
+**Backend Features and Technical Highlights**
+
+- **User Management**: Provides essential features like user registration, login, and password reset.
   
-用户注册、用户登录、重置密码等基础功能  
+- **MyBatis-Plus Integration**: Utilizes MyBatis-Plus for the DAO layer, simplifying database interactions.
 
-采用Mybatis-Plus作为DAO层框架，使用更便捷  
-采用Redis存储注册/重置操作验证码，具备过期时间控制 
-采用Redis进行IP地址限流处理，可以控制密集访问  
-采用RabbitMQ发送任务，再由监听器统一处理（发送注册/重置密码验证码至邮箱）  
-采用SpringSecurity作为权限校验框架，手动整合Jwt校验方案  
+- **Redis for Verification**: Stores registration and password reset verification codes in Redis with expiration time control.
 
-视图层对象和数据层对象分离，编写工具方法利用反射快速互相转换  
-错误和异常页面统一采用JSON格式返回，前端处理响应更统一  
-手动处理跨域，采用过滤器实现  
+- **Rate Limiting with Redis**: Implements IP address rate limiting using Redis to manage high-frequency access.
+
+- **Asynchronous Task Processing with RabbitMQ**: Sends tasks via RabbitMQ, processed by listeners (e.g., sending verification codes to email for registration/password reset).
+
+- **Spring Security & JWT**: Leverages Spring Security for authentication, manually integrated with JWT for token validation.
+
+- **DTO and Entity Separation**: Separates Data Transfer Objects (DTOs) from data layer entities, using utility methods with reflection for easy conversion.
+
+- **Unified JSON Error Handling**: Standardizes error and exception responses in JSON format for consistent front-end processing.
+
+- **Custom CORS Handling**: Manages Cross-Origin Resource Sharing (CORS) using a custom filter implementation.
