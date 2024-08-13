@@ -9,7 +9,7 @@ spring:
     mail:
       host: smtp.163.com
       username: 15228204975@163.com
-      password: BREZBQTPCZKPRMTL
+      password: 
     rabbitmq:
       addresses: localhost
       username: guest
@@ -26,5 +26,5 @@ spring:
     datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
-      password: lx120688
+      password: 
       url: jdbc:mysql://localhost:3306/spring_project
